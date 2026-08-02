@@ -1,727 +1,313 @@
-"use client";
+import Link from "next/link";
+import { MobileStickyCta, ProductWorkspace, SiteFooter, SiteHeader } from "@/components/cora/MarketingChrome";
+import { FastScrollExperience } from "@/components/cora/FastScrollExperience";
+import { GetStartedLink } from "@/components/cora/GetStartedLink";
+import styles from "./cora-site.module.css";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-
-const TRIAL_URL = "#trial";
-
-const trustMarks = ["Seoul", "Hudson", "babylon", "NOME", "phoenix", "Nexter"];
-
-const useCases = [
+const friction = [
   {
-    title: "Individual investors",
-    copy: "Track your portfolio, plan strategies, and make smarter decisions with clear AI insights.",
-    metric: "+32% Faster",
-    metricCopy: "Decision-making with AI insights",
-    className: "use-case-blue",
+    number: "01",
+    title: "One clear starting point",
+    copy: "Open one workspace and see what needs your attention. No hunting through a plugin stack before work can begin.",
   },
   {
-    title: "Financial teams",
-    copy: "Collaborate on financial strategies, monitor investments, and make data-driven decisions.",
-    metric: "Real-Time",
-    metricCopy: "Collaboration across all investment data",
-    className: "use-case-green",
+    number: "02",
+    title: "Guided by default",
+    copy: "Common actions stay obvious. Setup and daily work are designed for busy owners, not software specialists.",
   },
   {
-    title: "Wealth managers",
-    copy: "Manage multiple client portfolios, identify risk, and personalize tracking.",
-    metric: "10K+",
-    metricCopy: "Portfolios managed securely",
-    className: "use-case-violet",
-  },
-  {
-    title: "Active traders",
-    copy: "Stay ahead of market moves with real-time alerts and decision-ready signals.",
-    metric: "Up to 2X",
-    metricCopy: "Faster analysis and portfolio updates",
-    className: "use-case-coral",
+    number: "03",
+    title: "Control when you need it",
+    copy: "Advanced roles, verification and business controls remain available without overwhelming the everyday experience.",
   },
 ];
 
-const testimonials = [
-  {
-    quote:
-      "The platform helped me understand my portfolio in ways I couldn't before. The insights are clear and actually useful.",
-    name: "David Miller",
-    role: "Individual Investor",
-    initials: "DM",
-  },
-  {
-    quote:
-      "Managing multiple portfolios is much easier now. The risk analysis tools save us hours every week.",
-    name: "Sarah Thompson",
-    role: "Wealth Manager",
-    initials: "ST",
-  },
-  {
-    quote:
-      "The real-time insights and alerts help our team react faster to market changes. It is now part of our daily workflow.",
-    name: "Michael Chen",
-    role: "Active Trader",
-    initials: "MC",
-  },
+const journey = [
+  ["01", "Show us your current setup", "Start with the WordPress tools and fragmented workflows you already use."],
+  ["02", "Activate one useful workflow", "We help you get one real business outcome working before adding more complexity."],
+  ["03", "Run the day from one workspace", "Your team gets a shared place to see work, ownership and next actions."],
+  ["04", "Unlock deeper controls", "Add permissions, verification and advanced settings as your operation grows."],
+];
+
+const freeTools = [
+  ["Quotation maker", "Create a clean service quotation in minutes."],
+  ["Service pricing calculator", "Price your work with costs and margin in view."],
+  ["WhatsApp enquiry link", "Turn a click into a structured customer enquiry."],
+  ["Plugin cost calculator", "See what your fragmented WordPress stack really costs."],
 ];
 
 const faqs = [
-  {
-    q: "How secure is my financial data?",
-    a: "Your data is protected with industry-standard encryption and secure infrastructure. We follow strict security practices to ensure your financial information remains private and safe.",
-  },
-  {
-    q: "Can I connect multiple investment accounts?",
-    a: "Yes. Connect multiple accounts to see holdings, performance, risk, and activity together in one clear dashboard.",
-  },
-  {
-    q: "How do the AI insights work?",
-    a: "The platform analyzes portfolio and market data to surface patterns, risks, and timely recommendations you can review before acting.",
-  },
-  {
-    q: "Is a trial available before subscribing?",
-    a: "Yes. You can explore the core platform with a free trial before choosing a paid plan.",
-  },
-  {
-    q: "Do you offer plans for financial teams or organizations?",
-    a: "Yes. Custom team plans can include more users, advanced controls, priority support, and tailored integrations.",
-  },
+  [
+    "Is heyCora another WordPress plugin?",
+    "heyCora gives your team one managed workspace instead of asking them to piece together the daily experience across several plugin interfaces.",
+  ],
+  [
+    "Who is the beta for?",
+    "The initial beta is for India-based service businesses already using WordPress and several disconnected tools or plugins.",
+  ],
+  [
+    "What happens after the 30-day trial?",
+    "Your first 30 days include access to every available feature. After that, continue on the Free Forever plan with essential features or upgrade to keep the advanced controls.",
+  ],
+  [
+    "Is every feature finished?",
+    "No. heyCora is an active beta. We publish what is available, what is being built and where early users can influence the product.",
+  ],
 ];
 
-function Logo({ inverse = false }: { inverse?: boolean }) {
-  return (
-    <span className={`logo ${inverse ? "logo-inverse" : ""}`}>
-      <span className="logo-mark" aria-hidden="true">
-        <i />
-        <i />
-      </span>
-      <span>CORA</span>
-    </span>
-  );
-}
-
-function Arrow({ dark = false }: { dark?: boolean }) {
-  return (
-    <span className={`button-arrow ${dark ? "button-arrow-dark" : ""}`} aria-hidden="true">
-      →
-    </span>
-  );
-}
-
-function PrimaryButton({
-  children,
-  href = TRIAL_URL,
-  dark = false,
-}: {
-  children: React.ReactNode;
-  href?: string;
-  dark?: boolean;
-}) {
-  return (
-    <a className={`button button-primary ${dark ? "button-dark" : ""}`} href={href}>
-      <span>{children}</span>
-      <Arrow dark={dark} />
-    </a>
-  );
-}
-
-function SecondaryButton({
-  children,
-  href = "#platform",
-  dark = false,
-}: {
-  children: React.ReactNode;
-  href?: string;
-  dark?: boolean;
-}) {
-  return (
-    <a className={`button button-secondary ${dark ? "button-dark" : ""}`} href={href}>
-      {children}
-    </a>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <span className="section-label">{children}</span>;
-}
-
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [comparison, setComparison] = useState<"before" | "after">("after");
-  const [step, setStep] = useState(1);
-  const [yearly, setYearly] = useState(false);
-  const [openFaq, setOpenFaq] = useState(0);
-  const [signal, setSignal] = useState(0);
-
-  useEffect(() => {
-    const id = window.setInterval(() => setSignal((value) => (value + 1) % 3), 2200);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const signals = [
-    { label: "BUY", className: "signal-buy" },
-    { label: "HOLD", className: "signal-hold" },
-    { label: "SELL", className: "signal-sell" },
-  ];
-
-  const stepContent = [
-    {
-      title: "Connect your accounts",
-      copy: "Securely bring your investment accounts and financial data into one place.",
-      accuracy: "100% secure",
-    },
-    {
-      title: "Analyze your data",
-      copy: "AI processes your data to generate clear insights.",
-      accuracy: "95% accuracy",
-    },
-    {
-      title: "Act with confidence",
-      copy: "Review recommendations, risks, and opportunities before making decisions.",
-      accuracy: "24/7 insights",
-    },
-  ][step];
-
   return (
-    <main>
-      <section className="hero" id="home">
-        <div className="cloud cloud-one" />
-        <div className="cloud cloud-two" />
+    <main className={styles.site}>
+      <FastScrollExperience />
+      <SiteHeader />
 
-        <header className="nav-shell">
-          <a href="#home" aria-label="CORA home">
-            <Logo />
-          </a>
-          <nav className="desktop-nav" aria-label="Main navigation">
-            <a href="#platform">Products</a>
-            <a href="/blog">Blog &amp; Insights</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-            <a href="#pricing">Pricing</a>
-          </nav>
-          <a className="nav-cta" href={TRIAL_URL}>
-            Try it free <Arrow dark />
-          </a>
-          <button
-            className="menu-toggle"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((value) => !value)}
-          >
-            <span />
-            <span />
-          </button>
-          {menuOpen && (
-            <nav className="mobile-nav" aria-label="Mobile navigation">
-              <a href="#platform" onClick={() => setMenuOpen(false)}>
-                Products
-              </a>
-              <a href="/blog" onClick={() => setMenuOpen(false)}>
-                Blog &amp; Insights
-              </a>
-              <a href="/about" onClick={() => setMenuOpen(false)}>
-                About
-              </a>
-              <a href="/contact" onClick={() => setMenuOpen(false)}>
-                Contact
-              </a>
-              <a href="#pricing" onClick={() => setMenuOpen(false)}>
-                Pricing
-              </a>
-              <a href={TRIAL_URL} onClick={() => setMenuOpen(false)}>
-                Try it free
-              </a>
-            </nav>
-          )}
-        </header>
-
-        <div className="hero-content">
-          <h1>
-            Finance{" "}
-            <span className="ai-tile" aria-label="AI">
-              AI
-            </span>{" "}
-            Platform
-          </h1>
-          <p>
-            Optimize your investments with AI-driven analysis,
-            <br className="desktop-break" /> real-time tracking, and intelligent recommendations.
-          </p>
-          <div className="button-row">
-            <PrimaryButton>Get started now</PrimaryButton>
-            <SecondaryButton>View demo</SecondaryButton>
-          </div>
-          <div className="trust-row">
-            <span>⭐ 4.9/5 Rating</span>
-            <span>🛡️ Bank-level security</span>
-            <span>⚡ Real-time AI insights</span>
-          </div>
-        </div>
-
-        <div className="hero-dashboard-wrap">
-          <div className="dashboard-brand-fix">
-            <Logo inverse />
-          </div>
-          <Image
-            src="/assets/dashboard.webp"
-            alt="Financial intelligence dashboard"
-            width={942}
-            height={550}
-            priority
-          />
-        </div>
-        <div className="hero-meadow" />
-      </section>
-
-      <section className="trusted">
-        <span className="trusted-label">Trusted by investors and financial teams</span>
-        <div className="logo-rail" aria-label="Trusted companies">
-          {trustMarks.map((mark) => (
-            <span key={mark}>{mark}</span>
-          ))}
-        </div>
-      </section>
-
-      <section className="comparison section-pad">
-        <div className="section-heading centered">
-          <h2>Smarter decisions start with clear data</h2>
-        </div>
-        <div className="comparison-switcher">
-          <button
-            className={comparison === "before" ? "active" : ""}
-            onClick={() => setComparison("before")}
-          >
-            Before CORA
-          </button>
-          <div className={`comparison-orb ${comparison}`} aria-hidden="true">
-            <span className="logo-mark">
-              <i />
-              <i />
+      <section className={styles.hero}>
+        <div className={styles.heroGlow} aria-hidden="true" />
+        <div className={styles.shell}>
+          <div className={styles.heroCopy}>
+            <span className={styles.eyebrow}>
+              <i aria-hidden="true" /> 30-day full access · Free forever after
             </span>
-          </div>
-          <button
-            className={comparison === "after" ? "active" : ""}
-            onClick={() => setComparison("after")}
-          >
-            After CORA
-          </button>
-        </div>
-        <div className={`comparison-card ${comparison}`}>
-          <div>
-            <span className="comparison-kicker">
-              {comparison === "before" ? "Challenges of managing investments today" : "Smarter way to manage your investments"}
-            </span>
-            <ul>
-              {(comparison === "before"
-                ? [
-                    "Fragmented data across multiple platforms",
-                    "Lack of clear direction for long-term decisions",
-                    "Tracking investments manually takes time",
-                    "Difficult to understand portfolio risks",
-                  ]
-                : [
-                    "Get clear recommendations based on real-time data",
-                    "Understand risks before making investment decisions",
-                    "Monitor your portfolio in real time",
-                    "Make confident and informed investment choices",
-                  ]
-              ).map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="comparison-metrics">
-            <div>
-              <strong>{comparison === "before" ? "60%" : "3X Faster"}</strong>
-              <span>{comparison === "before" ? "Financial confusion" : "Smart decisions"}</span>
+            <h1>
+              Your service business.
+              <span>One simple workspace.</span>
+            </h1>
+            <p>
+              Replace the daily chaos of WordPress and 10+ fragmented plugins with one clear place to run your work, people and customer operations.
+            </p>
+            <div className={styles.heroActions}>
+              <GetStartedLink className={styles.primaryButton} placement="hero">
+                Start 30-day full access <span aria-hidden="true">↗</span>
+              </GetStartedLink>
             </div>
-            <div>
-              <strong>{comparison === "before" ? "55%" : "24/7"}</strong>
-              <span>{comparison === "before" ? "Poor data understanding" : "Real-time tracking"}</span>
+            <div className={styles.heroMeta}>
+              <span>For Indian service businesses</span>
+              <span>All features for 30 days</span>
+              <span>Then stay free or upgrade</span>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="features section-pad" id="features">
-        <div className="section-heading split">
-          <div>
-            <SectionLabel>Core features</SectionLabel>
-            <h2>Everything you need to invest confidently</h2>
-          </div>
-          <div className="heading-side">
-            <p>Professional tools designed for active traders and long-term investors managing complex portfolios.</p>
-            <a href="#platform" className="text-link">
-              View all features <Arrow dark />
-            </a>
-          </div>
-        </div>
-
-        <div className="feature-grid">
-          <article className="feature-card feature-risk">
-            <h3>Advanced risk analysis</h3>
-            <Image src="/assets/risk-shield.webp" alt="" width={201} height={173} />
-            <div className="pill-marquee">
-              <span>Portfolio volatility tracking</span>
-              <span>Predictive risk alerts</span>
-              <span>Real-time risk scoring</span>
+          <div className={styles.heroProduct}>
+            <div className={styles.demoLabel}>
+              <span>Workspace preview</span>
+              <span className={styles.liveBadge}>Beta</span>
             </div>
-          </article>
-
-          <article className="feature-card feature-market">
-            <Image src="/assets/market-insights.webp" alt="Live market insights chart" fill sizes="(max-width: 760px) 100vw, 40vw" />
-          </article>
-
-          <article className="feature-card feature-signal">
-            <h3>AI-powered insights</h3>
-            <div className={`signal-word ${signals[signal].className}`}>{signals[signal].label}</div>
-            <p>Real-time market data and predictive analysis.</p>
-          </article>
-
-          <article className="feature-card feature-portfolio">
-            <div className="feature-copy">
-              <h3>Portfolio tracking</h3>
-              <p>See your entire financial picture in one place with performance attribution and gain/loss analysis.</p>
-            </div>
-            <div className="mini-portfolio">
-              <div className="mini-card">
-                <span>Total portfolio</span>
-                <strong>$124,500</strong>
-                <small>+12.4%</small>
-              </div>
-              <div className="mini-card tilted">
-                <span>Best performer</span>
-                <strong>$12,018</strong>
-                <small>+8.4%</small>
-              </div>
-              <div className="mini-card">
-                <span>Risk score</span>
-                <strong>92%</strong>
-                <small>Healthy</small>
-              </div>
-            </div>
-          </article>
-
-          <article className="feature-card feature-alerts">
-            <h3>Smart alerts</h3>
-            <Image src="/assets/smart-alerts.webp" alt="Investment alert stack" width={285} height={109} />
-          </article>
-        </div>
-      </section>
-
-      <section className="platform section-pad" id="platform">
-        <div className="section-heading centered">
-          <SectionLabel>Platform overview</SectionLabel>
-          <h2>See your financial intelligence in action</h2>
-          <p>Explore a real-time dashboard that brings your portfolio, insights, and risk analysis together in one clear view.</p>
-          <div className="button-row">
-            <PrimaryButton href="#features">Explore features</PrimaryButton>
-            <SecondaryButton>Try the live demo</SecondaryButton>
-          </div>
-        </div>
-        <div className="platform-preview">
-          <div className="preview-dashboard">
-            <div className="dashboard-brand-fix">
-              <Logo inverse />
-            </div>
-            <Image src="/assets/dashboard.webp" alt="CORA platform dashboard" width={942} height={550} />
-          </div>
-          <div className="preview-notes">
-            <article>
-              <span>↗</span>
-              <p>All your data in one place. Bring accounts together, organize goals, and track performance.</p>
-            </article>
-            <article>
-              <span>↗</span>
-              <p>Make progress faster. Access key insights instantly and know where to focus your attention.</p>
-            </article>
-            <article>
-              <span>↗</span>
-              <p>Built for better focus. A clean interface that helps you stay focused and keep everything simple.</p>
-            </article>
+            <ProductWorkspace />
           </div>
         </div>
       </section>
 
-      <section className="how-it-works section-pad" id="how-it-works">
-        <div className="section-heading">
-          <SectionLabel>How it works</SectionLabel>
-          <h2>Start investing in minutes</h2>
-          <p>Connect your accounts, let AI analyze your data, and get clear insights to invest with confidence.</p>
-        </div>
-        <div className="metrics-inline">
-          <div>
-            <strong>100%</strong>
-            <span>Secure, encrypted data protection</span>
+      <section className={styles.promiseSection} id="why-cora">
+        <div className={styles.shell}>
+          <div className={styles.sectionIntro} data-cora-reveal>
+            <span className={styles.kicker}>The product principle</span>
+            <h2>Simple on the surface. Powerful underneath.</h2>
+            <p>
+              Your customers should not need to understand your software stack. Your team should not need technical training to complete everyday work.
+            </p>
           </div>
-          <div>
-            <strong>2 Minutes</strong>
-            <span>Set up to connect and begin instantly</span>
-          </div>
-        </div>
-        <div className="steps">
-          <div className="step-tabs">
-            {[0, 1, 2].map((item) => (
-              <button className={step === item ? "active" : ""} onClick={() => setStep(item)} key={item}>
-                Step 0{item + 1}
-              </button>
-            ))}
-          </div>
-          <div className="process-image">
-            <Image src="/assets/process.webp" alt="AI investment analysis process" width={872} height={510} />
-            <div className="process-overlay">
-              <strong>{stepContent.accuracy}</strong>
-              <h3>{stepContent.title}</h3>
-              <p>{stepContent.copy}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="security section-pad">
-        <div className="security-copy">
-          <SectionLabel>Security &amp; compliance</SectionLabel>
-          <h2>Your data is protected at every level</h2>
-          <ul>
-            <li>End-to-end encryption</li>
-            <li>Secure data infrastructure</li>
-            <li>Privacy-first approach</li>
-            <li>Compliance standards</li>
-          </ul>
-          <PrimaryButton dark>Get started</PrimaryButton>
-        </div>
-        <div className="security-visual">
-          <Image src="/assets/security.webp" alt="Security and compliance certifications" width={875} height={695} />
-        </div>
-      </section>
-
-      <section className="use-cases section-pad" id="use-cases">
-        <div className="section-heading centered">
-          <SectionLabel>Use cases</SectionLabel>
-          <h2>Who this platform is built for</h2>
-        </div>
-        <div className="use-case-track">
-          {useCases.map((item) => (
-            <article className={`use-case-card ${item.className}`} key={item.title}>
-              <div className="use-case-icon">↗</div>
-              <h3>{item.title}</h3>
-              <p>{item.copy}</p>
-              <div className="use-case-metric">
-                <strong>{item.metric}</strong>
-                <span>{item.metricCopy}</span>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="use-case-badges">
-          <span>10,000+ Users</span>
-          <span>4.9 Rating</span>
-          <span>Real-time insights</span>
-          <span>Secure &amp; compliant</span>
-        </div>
-        <blockquote>
-          “We built this platform to remove the guesswork from investing and give people clear, data-driven insights.”
-          <footer>
-            <span className="avatar">FC</span> Founder &amp; CEO
-          </footer>
-        </blockquote>
-      </section>
-
-      <section className="integrations section-pad" id="integrations">
-        <div className="integration-card">
-          <SectionLabel>Integrations</SectionLabel>
-          <h2>Connect with the<br />tools you already use</h2>
-          <p>Seamlessly integrate with your financial platforms, data sources, and tools to keep everything connected and up to date.</p>
-          <PrimaryButton>Explore all integrations</PrimaryButton>
-          <div className="integration-hills">
-            <Image src="/assets/integration-hills.webp" alt="" fill sizes="100vw" />
-          </div>
-        </div>
-      </section>
-
-      <section className="stats section-pad">
-        <div className="section-heading centered">
-          <SectionLabel>Platform stats</SectionLabel>
-          <h2>Powering smarter investment decisions</h2>
-          <p>Real-time insights, advanced analytics, and secure infrastructure working together.</p>
-        </div>
-        <div className="stats-grid">
-          {[
-            ["Active investors", "10,000+", "Users managing portfolios with AI insights."],
-            ["Assets tracked", "$250M+", "In investments monitored across the platform."],
-            ["Platform uptime", "99.9%", "Reliable access to your financial intelligence."],
-            ["AI insights generated", "1M+", "Data-driven signals delivered every month."],
-          ].map(([label, value, copy], index) => (
-            <article className={index % 2 ? "dark" : ""} key={label}>
-              <span>{label}</span>
-              <strong>{value}</strong>
-              <p>{copy}</p>
-              <i>{index === 0 ? "♟" : index === 1 ? "◉" : index === 2 ? "◷" : "●"}</i>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="testimonials section-pad">
-        <div className="section-heading">
-          <h2>What investors say about the platform</h2>
-          <div className="testimonial-meta">
-            <span>⭐ 4.9/5 Rating</span>
-            <span>♥ 75+ Testimonials</span>
-            <span>♟ 10K+ Growth community</span>
-          </div>
-          <PrimaryButton dark>Get started today</PrimaryButton>
-        </div>
-        <div className="testimonial-marquee">
-          <div className="testimonial-track">
-            {[...testimonials, ...testimonials].map((item, index) => (
-              <article key={`${item.name}-${index}`}>
-                <div className="stars">★★★★★</div>
-                <p>{item.quote}</p>
-                <footer>
-                  <span className={`avatar avatar-${(index % 3) + 1}`}>{item.initials}</span>
-                  <span>
-                    <strong>{item.name}</strong>
-                    <small>{item.role}</small>
-                  </span>
-                </footer>
+          <div className={styles.principleGrid}>
+            {friction.map((item) => (
+              <article className={styles.principleCard} data-cora-reveal key={item.number}>
+                <span>{item.number}</span>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="pricing section-pad" id="pricing">
-        <div className="section-heading centered">
-          <SectionLabel>Subscription plans</SectionLabel>
-          <h2>Transparent pricing without hidden fees</h2>
-        </div>
-        <div className="billing-toggle">
-          <span className={!yearly ? "active" : ""}>Monthly</span>
-          <button aria-label="Toggle yearly billing" onClick={() => setYearly((value) => !value)}>
-            <i className={yearly ? "yearly" : ""} />
-          </button>
-          <span className={yearly ? "active" : ""}>Yearly</span>
-          <em>20% off</em>
-        </div>
-        <div className="pricing-wrap">
-          <article className="price-card">
-            <h3>Starter plan</h3>
-            <p>Best for individual investors</p>
-            <div className="price">
-              <strong>${yearly ? "15" : "19"}</strong>
-              <span>/month</span>
+      <section className={styles.stackSection} aria-labelledby="stack-title">
+        <div className={styles.shell}>
+          <div className={styles.stackStory} data-cora-stack>
+            <div className={styles.stackCopy} data-cora-reveal>
+              <span className={styles.kicker}>From plugin chaos to one workspace</span>
+              <h2 id="stack-title">Not ten different tools. One Cora.</h2>
+              <p>Enquiries, bookings, customers, your team and daily work—without opening a different plugin for every task.</p>
             </div>
-            <a href={TRIAL_URL}>Get started</a>
-            <ul>
-              <li>Connect up to 5 investment accounts</li>
-              <li>Portfolio performance tracking</li>
-              <li>Basic AI insights</li>
-              <li>Market updates &amp; alerts</li>
-              <li>Real-time price alerts</li>
-              <li>Email support</li>
-            </ul>
-          </article>
-          <article className="price-card price-card-dark">
-            <span className="popular">Popular</span>
-            <h3>Pro plan</h3>
-            <p>Best for active investors</p>
-            <div className="price">
-              <strong>${yearly ? "31" : "39"}</strong>
-              <span>/month</span>
-            </div>
-            <a href={TRIAL_URL}>Get started</a>
-            <ul>
-              <li>Unlimited account connections</li>
-              <li>Advanced AI investment insights</li>
-              <li>Portfolio risk analysis</li>
-              <li>Smart alerts &amp; automation</li>
-              <li>Historical performance analytics</li>
-              <li>Priority support</li>
-            </ul>
-          </article>
-          <div className="trial-notes">
-            <span>7-day free trial available</span>
-            <span>No credit card required</span>
-            <span>Cancel anytime</span>
-          </div>
-        </div>
-        <div className="enterprise">
-          <div>
-            <h3>Enterprise plan</h3>
-            <p>Need a custom solution for your organization?<br />Talk with our team to design a plan for your needs.</p>
-          </div>
-          <a href="#footer">Contact sales</a>
-        </div>
-      </section>
-
-      <section className="faq section-pad" id="faq">
-        <div className="faq-side">
-          <h2>Frequently asked questions</h2>
-          <p>Find quick answers to common questions about the platform, pricing, and security.</p>
-          <div className="question-card">
-            <div className="avatar-stack">
-              <span>DM</span><span>ST</span><span>MC</span><span>+</span><span>You</span>
-            </div>
-            <strong>Still have questions?</strong>
-            <p>Reach out, and our team will guide you.</p>
-            <a href="#footer">Talk to our team <Arrow dark /></a>
-          </div>
-        </div>
-        <div className="accordion">
-          {faqs.map((item, index) => (
-            <article className={openFaq === index ? "open" : ""} key={item.q}>
-              <button onClick={() => setOpenFaq(openFaq === index ? -1 : index)}>
-                <span>{item.q}</span>
-                <i>{openFaq === index ? "−" : "+"}</i>
-              </button>
-              <div className="answer">
-                <p>{item.a}</p>
+            <div className={styles.stackVisual}>
+              <div className={styles.pluginCloud} aria-label="Fragmented business tools">
+                {["Forms", "Bookings", "CRM", "Invoices", "Team", "WhatsApp", "Reviews", "Tasks", "Reports", "Customers"].map((tool) => (
+                  <span data-cora-stack-item key={tool}>{tool}</span>
+                ))}
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="final-cta" id="trial">
-        <div className="cloud cloud-three" />
-        <div className="section-heading centered">
-          <h2>Ready to invest smarter?</h2>
-          <p>Join investors using AI insights and real-time data to track portfolios and make better financial decisions.</p>
-          <div className="button-row">
-            <PrimaryButton>Start free trial</PrimaryButton>
-            <SecondaryButton>Try the live demo</SecondaryButton>
+              <span className={styles.stackArrow} aria-hidden="true">→</span>
+              <div className={styles.coraCore} data-cora-core>
+                <span>C</span>
+                <strong>One Cora workspace</strong>
+                <small>Simple daily view. Advanced control inside.</small>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="cta-meadow" />
       </section>
 
-      <footer className="footer" id="footer">
-        <div className="footer-brand">
-          <Logo />
-          <p>A modern platform for smarter portfolio tracking, quantitative analytics, and AI financial insights.</p>
-          <a href="mailto:support@cora.com">support@cora.com</a>
+      <section className={styles.featureSpotlight} id="features">
+        <div className={styles.shell}>
+          <div className={styles.spotlightGrid} data-cora-reveal>
+            <div className={styles.spotlightCopy}>
+              <span className={styles.kicker}>Shipping this week</span>
+              <h2>User management without the admin maze.</h2>
+              <p>
+                We are shaping a workflow that helps an owner invite people, choose responsibilities and keep verification visible—without exposing every advanced setting at once.
+              </p>
+              <ul className={styles.checkList}>
+                <li><span>✓</span> Clear responsibilities before complex permissions</li>
+                <li><span>✓</span> Verification status visible in one place</li>
+                <li><span>✓</span> Advanced controls available only when needed</li>
+              </ul>
+              <Link className={styles.textLink} href="/features/user-management">
+                Open the complete workflow <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+
+            <div className={styles.teamPanel}>
+              <div className={styles.panelHeader}>
+                <div>
+                  <small>People &amp; access</small>
+                  <strong>Workspace team</strong>
+                </div>
+                <button type="button">+ Invite person</button>
+              </div>
+              {[
+                ["AS", "Aarav Sharma", "Owner", "Verified", "active"],
+                ["NP", "Neha Patel", "Operations", "Invite sent", "pending"],
+                ["RK", "Rohan Kumar", "Team member", "Verification needed", "warning"],
+              ].map(([initials, name, role, status, tone]) => (
+                <div className={styles.personRow} key={name}>
+                  <span className={styles.avatar}>{initials}</span>
+                  <span className={styles.personName}><strong>{name}</strong><small>{role}</small></span>
+                  <span className={`${styles.status} ${styles[tone]}`}>{status}</span>
+                  <span className={styles.more} aria-hidden="true">•••</span>
+                </div>
+              ))}
+              <div className={styles.panelNote}>
+                <span>Advanced access controls</span>
+                <strong>Available when your team needs them →</strong>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <h3>Research &amp; Content</h3>
-          <a href="/blog">Blog &amp; Insights</a>
-          <a href="/blog/ai-portfolio-optimization-2026">AI Portfolio Strategy</a>
-          <a href="/blog/algorithmic-risk-management-strategies">Algorithmic Risk</a>
-          <a href="/blog/retail-investor-guide-ai-trading-tools">AI Trading Tools</a>
+      </section>
+
+      <section className={styles.journeySection} id="how-it-works">
+        <div className={styles.shell}>
+          <div className={styles.sectionIntro} data-cora-reveal>
+            <span className={styles.kicker}>An effortless path</span>
+            <h2>Start with one outcome. Grow into the platform.</h2>
+          </div>
+          <div className={styles.journeyList}>
+            {journey.map(([number, title, copy]) => (
+              <article className={styles.journeyRow} data-cora-reveal key={number}>
+                <span>{number}</span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </article>
+            ))}
+          </div>
         </div>
-        <div>
-          <h3>Company</h3>
-          <a href="/about">About Us</a>
-          <a href="/contact">Contact Support</a>
-          <a href="#pricing">Pricing Plans</a>
-          <a href="#platform">Platform Demo</a>
+      </section>
+
+      <section className={styles.toolsSection} id="free-tools">
+        <div className={styles.shell}>
+          <div className={styles.toolsIntro} data-cora-reveal>
+            <div>
+              <span className={styles.kicker}>Useful before you sign up</span>
+              <h2>Free tools for busy Indian service businesses.</h2>
+            </div>
+            <p>Get a useful result first. Save it, reuse it and manage the next step inside your free Cora workspace.</p>
+          </div>
+          <div className={styles.toolsGrid}>
+            {freeTools.map(([name, copy], index) => (
+              <article className={styles.toolCard} data-cora-reveal key={name}>
+                <span>0{index + 1}</span>
+                <h3>{name}</h3>
+                <p>{copy}</p>
+                <small>Free tool · Coming soon</small>
+              </article>
+            ))}
+          </div>
         </div>
-        <div>
-          <h3>Legal &amp; Compliance</h3>
-          <a href="/privacy-policy">Privacy Policy</a>
-          <a href="/terms-of-service">Terms of Service</a>
-          <a href="/disclaimer">Financial Disclaimer</a>
-          <a href="/sitemap.xml">XML Sitemap</a>
+      </section>
+
+      <section className={styles.publicBuild} id="build-in-public">
+        <div className={styles.shell}>
+          <div className={styles.publicCard} data-cora-reveal>
+            <div>
+              <span className={styles.eyebrow}><i aria-hidden="true" /> Building with our first users</span>
+              <h2>Watch the product become useful, one business problem at a time.</h2>
+              <p>
+                Our build-in-public sessions show the problem, the product decision and the working beta flow—without turning the series into a developer tutorial.
+              </p>
+            </div>
+            <div className={styles.sessionCard}>
+              <span>Next workflow</span>
+              <strong>User management &amp; verification</strong>
+              <p>Problem → workflow → beta decisions → live questions</p>
+              <Link href="/features/user-management">Open the interactive feature story ↗</Link>
+            </div>
+          </div>
         </div>
-      </footer>
-      <div className="footer-bottom">© 2026 CORA Financial Technologies Inc. All rights reserved. Google AdSense compliant.</div>
+      </section>
+
+      <section className={styles.pricingSection} id="pricing">
+        <div className={styles.shell}>
+          <div className={styles.pricingCard} data-cora-reveal>
+            <div>
+              <span className={styles.kicker}>Start without risk</span>
+              <h2>Everything for 30 days. Essential Cora forever.</h2>
+              <p>After the trial, continue free with limited essentials—or upgrade to keep every advanced feature unlocked.</p>
+            </div>
+            <div className={styles.priceRail} aria-label="Planned annual price options">
+              <span><strong>₹0</strong><small>free forever</small></span>
+              <span><strong>₹1,999</strong><small>/ year</small></span>
+              <span><strong>₹2,999</strong><small>/ year</small></span>
+              <span><strong>₹4,999</strong><small>/ year</small></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.faqSection} id="faq">
+        <div className={styles.shell}>
+          <div className={styles.faqGrid} data-cora-reveal>
+            <div className={styles.sectionIntro}>
+              <span className={styles.kicker}>Straight answers</span>
+              <h2>Before you join the beta.</h2>
+            </div>
+            <div className={styles.faqList}>
+              {faqs.map(([question, answer], index) => (
+                <details key={question} open={index === 0}>
+                  <summary>{question}<span aria-hidden="true">+</span></summary>
+                  <p>{answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.trialSection} id="trial">
+        <div className={styles.shell}>
+          <div className={styles.trialCard} data-cora-reveal>
+            <span className={styles.kicker}>30-day full-access beta</span>
+            <h2>Use every feature for 30 days. Then continue free—or upgrade.</h2>
+            <p>
+              Start inside Cora, tell us about your current setup and activate the first workflow that removes real work from your day.
+            </p>
+            <div className={styles.trialActions}>
+              <GetStartedLink className={styles.primaryButton} placement="bottom_trial">
+                Start full access free <span aria-hidden="true">→</span>
+              </GetStartedLink>
+              <span>No feature limits for 30 days · Free plan after trial</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <SiteFooter />
+      <MobileStickyCta />
     </main>
   );
 }

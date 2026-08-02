@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,10 +7,18 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "CORA — AI Financial Intelligence",
+  title: {
+    default: "heyCora — The all-in-one workspace for service businesses",
+    template: "%s | heyCora",
+  },
   description:
-    "Track investments, understand risk, and make smarter financial decisions with AI-powered insights.",
+    "A simple all-in-one workspace for service businesses replacing fragmented WordPress workflows with one connected experience.",
 };
 
 export default function RootLayout({
@@ -20,8 +28,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} h-full antialiased`}
+      lang="en-IN"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>
