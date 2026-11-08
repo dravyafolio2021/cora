@@ -21,6 +21,7 @@ export function SiteHeader() {
           <Link href="/#features">Features</Link>
           <Link href="/#free-tools">Free tools</Link>
           <Link href="/#pricing">Pricing</Link>
+          <Link href="/blog">Blog &amp; Insights</Link>
         </nav>
         <GetStartedLink className={styles.headerCta} placement="header">
           Start full access <span aria-hidden="true">↗</span>
@@ -40,6 +41,12 @@ export function SiteFooter() {
         </div>
         <div className={styles.footerLinks}>
           <Link href="/features/user-management">Current feature</Link>
+          <Link href="/blog">Blog &amp; Research</Link>
+          <Link href="/about">About Us</Link>
+          <Link href="/contact">Contact</Link>
+          <Link href="/privacy-policy">Privacy Policy</Link>
+          <Link href="/terms-of-service">Terms</Link>
+          <Link href="/disclaimer">Disclaimer</Link>
           <Link href="/#pricing">Pricing</Link>
           <GetStartedLink placement="footer">30-day full access</GetStartedLink>
         </div>

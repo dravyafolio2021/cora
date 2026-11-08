@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { blogPosts, BlogPost } from "@/data/blogData";
+import { SITE_URL } from "@/config/site";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -49,7 +50,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     "@type": "TechArticle",
     "headline": post.title,
     "description": post.excerpt,
-    "image": `https://heycora-ai-cora-dashboard.vercel.app${post.image}`,
+    "image": `${SITE_URL}${post.image}`,
     "datePublished": post.publishDate,
     "dateModified": post.updatedDate,
     "author": {
@@ -62,7 +63,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       "name": "CORA AI Financial Intelligence",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://heycora-ai-cora-dashboard.vercel.app/assets/dashboard.webp",
+        "url": `${SITE_URL}/assets/dashboard.webp`,
       },
     },
   };
@@ -111,8 +112,8 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
             <div className="share-buttons">
               <span>Share:</span>
-              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=https://heycora-ai-cora-dashboard.vercel.app/blog/${post.slug}`} target="_blank" rel="noopener noreferrer">𝕏</a>
-              <a href={`https://www.linkedin.com/shareArticle?mini=true&url=https://heycora-ai-cora-dashboard.vercel.app/blog/${post.slug}&title=${encodeURIComponent(post.title)}`} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${SITE_URL}/blog/${post.slug}`} target="_blank" rel="noopener noreferrer">𝕏</a>
+              <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${SITE_URL}/blog/${post.slug}&title=${encodeURIComponent(post.title)}`} target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </div>
           </div>
         </header>

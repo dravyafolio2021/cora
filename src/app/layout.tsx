@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SITE_URL } from "@/config/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,12 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "heyCora — The all-in-one workspace for service businesses",
+    default: "heyCora — The all-in-one workspace for service businesses & financial intelligence",
     template: "%s | heyCora",
   },
   description:
-    "A simple all-in-one workspace for service businesses replacing fragmented WordPress workflows with one connected experience.",
+    "A simple all-in-one workspace and financial intelligence platform for service businesses replacing fragmented workflows with one connected experience.",
 };
 
 export default function RootLayout({

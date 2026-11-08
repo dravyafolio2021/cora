@@ -1258,7 +1258,8 @@
 
 .footerLinks {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
   color: #52525b;
   font-size: 12px;
   font-weight: 580;
